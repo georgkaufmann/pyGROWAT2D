@@ -1,0 +1,12 @@
+#-------------------------------------------
+# .gitignore file for tutorial 
+#-------------------------------------------
+Untitled*.ipynb
+*noshow.ipynb
+div/
+lit/
+!lit/README.md
+work/
+!work/GROWAT2D_parameter.in
+!work/GROWAT2D_bc.in
+!work/GROWAT2D_materials.in
