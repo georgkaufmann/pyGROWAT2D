@@ -197,9 +197,10 @@ def createProperties2D(dataMAT,K,S,X,Y,nx,ny,control=False):
             ij = i + (j)*nx
             K[ij] = float(dataMAT[0][5])
             S[ij] = float(dataMAT[0][6])
+    #print('Primary material used')
     # additional materials (other lines in GROWAT2D_materials.in)
-    if (dataMAT.shape[1]!=0):
-        for ib in range(dataMAT.shape[0]):
+    if (dataMAT.shape[0] > 1):
+        for ib in range(1,dataMAT.shape[0]):
             mat = dataMAT[ib][0]
             x1 = float(dataMAT[ib][1])
             x2 = float(dataMAT[ib][2])
@@ -216,6 +217,7 @@ def createProperties2D(dataMAT,K,S,X,Y,nx,ny,control=False):
                     if (X[ij] >= x1 and X[ij] <= x2 and Y[ij] >= y1 and Y[ij] <= y2):
                         K[ij] = float(dataMAT[ib][5])
                         S[ij] = float(dataMAT[ib][6])
+        #print('Secondary material used: ',ib)
     if (control):
         print('%20s %10.6f %10.6f' % ('K.min,K.max [m/s]:',K.min(),K.max()))
         print('%20s %10.6f %10.6f' % ('S.min,S.max [1/s]:',S.min(),S.max()))
