@@ -1,4 +1,4 @@
      0.    2000.   21   ! eastmin,eastmax [m], nx  
  -1000.    1000.   21   ! northmin,northmax [m], ny 
      day                ! whichtime flag
-     1.0   150.  2.      ! time_start, time_end, time_step [time_units]
+      2.                ! time_step [time_units]

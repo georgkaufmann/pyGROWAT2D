@@ -21,11 +21,10 @@ def readParameter2D(infile='GROWAT2D_parameter.in',path='work/',control=False):
     !  xmin,xmax,nx         - min/max for x coordinate [m], discretisation
     !  ymin,ymax,ny         - min/max for y coordinate [m], discretisation
     !  whichtime            - flag for time units used
-    !  time_start,time_end  - start/end point for time scale [s]
     !  time_step            - time step [s]
     !  time_scale           - scaling coefficient for user time scale
     ! use:
-    !  xmin,xmax,nx,ymin,ymax,ny,time_start,time_end,time_step,time_scale,whichtime = libGROWAT2D.readParameter2D()
+    !  xmin,xmax,nx,ymin,ymax,ny,time_step,time_scale,whichtime = libGROWAT2D.readParameter2D()
     ! note:
     !  file structure given!
     !  uses readline(),variables come in as string,
@@ -40,7 +39,7 @@ def readParameter2D(infile='GROWAT2D_parameter.in',path='work/',control=False):
     line = f.readline()
     whichtime = line.split()[0]
     line = f.readline()
-    time_start,time_end,time_step = float(line.split()[0]),float(line.split()[1]),float(line.split()[2])
+    time_step = float(line.split()[0])
     f.close()
     # convert times from user times to seconds, based on whichtime flag
     min2sec  = 60.               # seconds per minute
@@ -53,8 +52,6 @@ def readParameter2D(infile='GROWAT2D_parameter.in',path='work/',control=False):
     if (whichtime=='day'):   time_scale = day2sec
     if (whichtime=='month'): time_scale = month2sec
     if (whichtime=='year'):  time_scale = year2sec
-    time_start *= time_scale
-    time_end   *= time_scale
     time_step  *= time_scale
     # control output to screen
     if (control):
@@ -63,12 +60,36 @@ def readParameter2D(infile='GROWAT2D_parameter.in',path='work/',control=False):
         print('%20s %10.2f %10.2f' % ('xmin,xmax [m]:',xmin,xmax))
         print('%20s %10.2f %10.2f' % ('ymin,ymax [m]:',ymin,ymax))
         print('%20s %10i %10i' % ('nx,ny:',nx,ny))
-        
+        print('%20s %s' % ('whichtime:',whichtime))
+        print('%20s %10.2f' % ('time_step['+whichtime+']:',time_step/time_scale))
+    return xmin,xmax,nx,ymin,ymax,ny,time_step,time_scale,whichtime
+
+
+#================================#
+def readTimeline2D(time_scale,whichtime,infile='GROWAT2D_timeline.in',path='work/',control=False):
+    """
+    ! read GROWAT2D timeline file
+    ! input:
+    !  (from file infile) plus:
+    !  time_scale           - scaling coefficient for user time scale
+    !  whichtime            - flag for time units used
+    ! output:
+    !  time_start,time_end  - start/end point for time scale [s]    
+    ! use:
+    !  time_start,time_end = libGROWAT2D.readTimeline2D(time_scale,whichtime)
+    ! note:
+    !  file structure given!
+    !  uses readline(),variables come in as string,
+    !  must be separated and converted ...
+    """
+    dataTIMES = np.loadtxt(path+infile,skiprows=2,dtype='float')
+    time_start = dataTIMES[0,0] * time_scale
+    time_end   = dataTIMES[-1,0] * time_scale
+    
+    if (control):
         print('%20s %10.2f' % ('time_start['+whichtime+']:',time_start/time_scale))
         print('%20s %10.2f' % ('time_end['+whichtime+']:',time_end/time_scale))
-        print('%20s %10.2f' % ('time_step['+whichtime+']:',time_step/time_scale))
-        print('%20s %s' % ('whichtime:',whichtime))
-    return xmin,xmax,nx,ymin,ymax,ny,time_start,time_end,time_step,time_scale,whichtime
+    return time_start,time_end
 
 
 #================================#
