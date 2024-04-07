@@ -6,6 +6,7 @@ Untitled*.ipynb
 div/
 lit/
 !lit/README.md
+versions/
 work/
 !work/GROWAT2D_parameter.in
 !work/GROWAT2D_bc.in
